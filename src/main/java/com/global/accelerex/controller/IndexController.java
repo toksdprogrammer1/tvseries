@@ -7,13 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/tvseries")
-public class SeriesController {
+@RequestMapping("/")
+public class IndexController {
 
-    @ResponseBody
     @GetMapping
-    String home() {
-        return "Hello World!";
+    public String sayHello() {
+        return "Hello and Welcome to the Global Accelerex TVseries application. Visit https://global-accelerex-tvseries.herokuapp.com/swagger-ui.html for the documentation";
     }
 
 }
