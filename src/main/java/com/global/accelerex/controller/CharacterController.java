@@ -2,6 +2,7 @@ package com.global.accelerex.controller;
 
 
 import com.global.accelerex.dto.CharacterDTO;
+import com.global.accelerex.dto.param.CharacterFilterparameter;
 import com.global.accelerex.dto.response.CharacterResponse;
 import com.global.accelerex.dto.response.EpisodeResponse;
 import com.global.accelerex.service.CharacterService;
@@ -33,8 +34,9 @@ public class CharacterController {
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/characters")
-    public List<CharacterResponse> getAllCharacters(@RequestParam(defaultValue = "gender,ascending") String[] sort){
-        return characterService.getAllCharacters(sort);
+    public List<CharacterResponse> getAllCharacters(@RequestParam(defaultValue = "firstName,ascending") String[] sort,
+                                                    CharacterFilterparameter characterFilterparameter){
+        return characterService.getAllCharacters(sort, characterFilterparameter);
     }
 
     @CrossOrigin

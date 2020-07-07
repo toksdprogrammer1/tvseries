@@ -1,6 +1,7 @@
 package com.global.accelerex.service;
 
 import com.global.accelerex.dto.CharacterDTO;
+import com.global.accelerex.dto.param.CharacterFilterparameter;
 import com.global.accelerex.dto.response.CharacterResponse;
 import com.global.accelerex.exception.BadRequestException;
 import com.global.accelerex.model.CharacterModel;
@@ -35,7 +36,7 @@ public class CharacterService {
         return mapCharacterModelToCharacterResponse(characterModel);
     }
 
-    public List<CharacterResponse> getAllCharacters(String[] sort){
+    public List<CharacterResponse> getAllCharacters(String[] sort, CharacterFilterparameter characterFilterparameter){
         List<Order> orders = new ArrayList<>();
         if (sort[0].contains(",")) {
             // will sort more than 2 fields
@@ -48,8 +49,8 @@ public class CharacterService {
             // sort=[field, direction]
             orders.add(new Order(getSortDirection(sort[1]), sort[0]));
         }
+        List<CharacterModel> characterModelList = findCharacters(characterFilterparameter, orders);
 
-        List<CharacterModel> characterModelList = characterRepository.findAll(Sort.by(orders));
         List<CharacterResponse> characterResponseList = new ArrayList<>();
         if (characterModelList != null){
             characterResponseList = characterModelList.stream().map(
@@ -95,4 +96,39 @@ public class CharacterService {
 
         return Sort.Direction.ASC;
     }
+
+    private List<CharacterModel> findCharacters(CharacterFilterparameter characterFilterparameter, List<Order> orders){
+        List<CharacterModel> characterModelList = new ArrayList<>();
+        if (characterFilterparameter == null) characterModelList = characterRepository.findAll(Sort.by(orders));
+        else if (characterFilterparameter.getStatus() != null && characterFilterparameter.getLocationName() == null
+                && characterFilterparameter.getGender() == null)
+            characterModelList = characterRepository.findByStatus(characterFilterparameter.getStatus(), Sort.by(orders));
+        else if (characterFilterparameter.getGender() != null && characterFilterparameter.getLocationName() == null
+                && characterFilterparameter.getStatus() == null)
+            characterModelList = characterRepository.findByGender(characterFilterparameter.getGender(), Sort.by(orders));
+        else if (characterFilterparameter.getLocationName() != null && characterFilterparameter.getStatus() == null
+                && characterFilterparameter.getGender() == null)
+            characterModelList =  characterRepository.findByLocationName(characterFilterparameter.getLocationName(), Sort.by(orders));
+        else if (characterFilterparameter.getStatus() != null && characterFilterparameter.getLocationName() != null
+                && characterFilterparameter.getGender() == null)
+            characterModelList =  characterRepository.findByStatusAndLocationName(characterFilterparameter.getStatus(),
+                    characterFilterparameter.getLocationName(), Sort.by(orders));
+        else if (characterFilterparameter.getStatus() != null && characterFilterparameter.getLocationName() == null
+                && characterFilterparameter.getGender() != null)
+            characterModelList = characterRepository.findByStatusAndGender(characterFilterparameter.getStatus(),
+                    characterFilterparameter.getGender(), Sort.by(orders));
+        else if (characterFilterparameter.getStatus() == null && characterFilterparameter.getLocationName() != null
+                && characterFilterparameter.getGender() != null)
+            characterModelList = characterRepository.findByGenderAndLocationName(characterFilterparameter.getGender(),
+                    characterFilterparameter.getLocationName(), Sort.by(orders));
+        else if (characterFilterparameter.getStatus() != null && characterFilterparameter.getLocationName() != null
+                && characterFilterparameter.getGender() != null)
+            characterModelList = characterRepository.findByStatusAndGenderAndLocationName(characterFilterparameter.getStatus(),
+                    characterFilterparameter.getGender(),
+                    characterFilterparameter.getLocationName(), Sort.by(orders));
+        else characterModelList = characterRepository.findAll(Sort.by(orders));
+
+        return characterModelList;
+    }
+
 }

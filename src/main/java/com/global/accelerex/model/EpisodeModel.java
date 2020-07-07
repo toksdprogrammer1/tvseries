@@ -18,7 +18,7 @@ public class EpisodeModel extends AuditModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
+
     @NotNull
     private String name;
     @NotNull

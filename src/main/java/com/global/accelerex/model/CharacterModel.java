@@ -22,11 +22,9 @@ public class CharacterModel extends AuditModel {
     @NotNull
     private String lastName;
     @NotNull
-    @NaturalId
     private String status;
     private String stateOfOrigin;
     @NotNull
-    @NaturalId
     private String gender;
     @Embedded
     private LocationModel location;
