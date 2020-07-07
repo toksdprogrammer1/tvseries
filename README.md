@@ -114,7 +114,9 @@ GET "https://global-accelerex-tvseries.herokuapp.com/episodes/1/comments"
 
 ### Comment list endpoint
 
-###Request
+GET "https://global-accelerex-tvseries.herokuapp.com/comments"
+
+###Response
 ```
 [
   {
@@ -241,7 +243,7 @@ GET "https://global-accelerex-tvseries.herokuapp.com/characters/21/episodes"
 ]
 ```
 
-###Character Endpoint sort by firstNme, ascending and gender, descending
+###Character Endpoint sort by firstName, ascending and gender, descending
 
 ######Request
 GET "https://global-accelerex-tvseries.herokuapp.com/characters/characters?sort=firstName,ascending&sort=gender,descending"
@@ -342,7 +344,7 @@ GET "https://global-accelerex-tvseries.herokuapp.com/characters/characters?sort=
 ]
 ```
 
-######Character Endpoint sort by firstNme, ascending and filter by gender
+######Character Endpoint sort by firstName, ascending and filter by gender
 
 ###Request
 GET "https://global-accelerex-tvseries.herokuapp.com/characters/characters?gender=FEMALE&sort=firstName,ascending"
@@ -399,7 +401,7 @@ GET "https://global-accelerex-tvseries.herokuapp.com/characters/characters?gende
 ]
 ```
 
-######Character Endpoint sort by firstNme, ascending and filter by gender and status
+######Character Endpoint sort by firstName, ascending and filter by gender and status
 
 ###Request
 https://global-accelerex-tvseries.herokuapp.com/characters/characters?gender=MALE&sort=firstName,ascending&status=UNKNOWN"
