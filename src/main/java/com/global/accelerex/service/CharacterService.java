@@ -10,12 +10,13 @@ import com.global.accelerex.repository.CharacterRepository;
 import com.global.accelerex.repository.EpisodeRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Sort.Order;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collector;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -34,8 +35,21 @@ public class CharacterService {
         return mapCharacterModelToCharacterResponse(characterModel);
     }
 
-    public List<CharacterResponse> getAllCharacters(){
-        List<CharacterModel> characterModelList = characterRepository.findAll();
+    public List<CharacterResponse> getAllCharacters(String[] sort){
+        List<Order> orders = new ArrayList<>();
+        if (sort[0].contains(",")) {
+            // will sort more than 2 fields
+            // sortOrder="field, direction"
+            for (String sortOrder : sort) {
+                String[] _sort = sortOrder.split(",");
+                orders.add(new Order(getSortDirection(_sort[1]), _sort[0]));
+            }
+        } else {
+            // sort=[field, direction]
+            orders.add(new Order(getSortDirection(sort[1]), sort[0]));
+        }
+
+        List<CharacterModel> characterModelList = characterRepository.findAll(Sort.by(orders));
         List<CharacterResponse> characterResponseList = new ArrayList<>();
         if (characterModelList != null){
             characterResponseList = characterModelList.stream().map(
@@ -70,5 +84,15 @@ public class CharacterService {
         BeanUtils.copyProperties(characterModel, characterResponse);
         characterResponse.setEpisodeCount(characterModel.getEpisodes() != null ? characterModel.getEpisodes().size(): 0);
         return characterResponse;
+    }
+
+    private Sort.Direction getSortDirection(String direction) {
+        if (direction.equals("ascending")) {
+            return Sort.Direction.ASC;
+        } else if (direction.equals("descending")) {
+            return Sort.Direction.DESC;
+        }
+
+        return Sort.Direction.ASC;
     }
 }

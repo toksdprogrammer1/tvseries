@@ -6,7 +6,7 @@ import com.global.accelerex.model.LocationModel;
 
 public class CharacterResponse extends AuditModel {
 
-
+    private Long id;
     private String firstName;
     private String lastName;
     private String status;
@@ -14,6 +14,14 @@ public class CharacterResponse extends AuditModel {
     private String gender;
     private LocationModel location;
     private long episodeCount;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
